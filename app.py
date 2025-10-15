@@ -3,7 +3,7 @@ import os, logging, zipfile, io, tempfile, pathlib
 import re
 import io
 import uuid
-import fitz
+from pypdf import PdfReader
 import pdfkit
 import zipfile
 from flask import Flask, request, render_template, send_file, flash, redirect, after_this_request
@@ -61,12 +61,9 @@ def allowed_file(filename: str) -> bool:
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED
 
 def extract_fields(path: str) -> dict:
-    with fitz.open(path) as doc:
-        lines = doc[0].get_text().splitlines()           # TODAS las líneas
-    # debug: ver las 40 primeras
-    with open("debug_lines.txt", "w", encoding="utf-8") as f:
-        for idx, l in enumerate(lines[:40], 1):
-            f.write(f"{idx:02d}| {l}\n")
+    reader = PdfReader(path)
+    text   = reader.pages[0].extract_text() or ""
+    lines  = text.splitlines()
 
     data = {}
 
