@@ -1,4 +1,4 @@
 Flask==2.3.3
 pdfkit==1.0.0
-PyMuPDF==1.23.8
+PyMuPDF==1.23.5
 gunicorn==21.2.0
